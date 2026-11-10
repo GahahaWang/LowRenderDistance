@@ -6,6 +6,8 @@
     "mixins": [
     ],
     "client": [
+        "DistanceMixin",
+        "IntegratedServerMixin"
     ],
     "injectors": {
         "defaultRequire": 1

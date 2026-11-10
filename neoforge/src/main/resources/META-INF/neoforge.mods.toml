@@ -1,31 +1,36 @@
 modLoader = "javafml"
 loaderVersion = "[2,)"
 #issueTrackerURL = ""
-license = "All Rights Reserved"
+license = "MIT"
 
 [[mods]]
-modId = "entitycount"
+modId = "lowrenderdistance"
 version = "${version}"
-displayName = "EntityCount"
+displayName = "LowRenderDistance"
 authors = "Gahaha"
 description = '''
-Count entities in your loaded chunks.
+Lets you set render distance and simulation distance as low as 1 chunk, in both the vanilla video settings and Sodium's. Client-side only.
 '''
-logoFile = "assets/entitycount/icon.png"
+logoFile = "assets/lowrenderdistance/icon.png"
+logoBlur = false
 
-[[dependencies.entitycount]]
-modId = "neoforge"
-type = "required"
-versionRange = "${neoforge_version_range}"
-ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.entitycount]]
+[[dependencies.lowrenderdistance]]
 modId = "minecraft"
 type = "required"
 versionRange = "${minecraft_version_range_neoforge}"
 ordering = "NONE"
 side = "BOTH"
 
+[[dependencies.lowrenderdistance]]
+modId = "sodium"
+type = "optional"
+versionRange = "[0,)"
+ordering = "NONE"
+side = "CLIENT"
+
 [[mixins]]
-config = "entitycount.mixins.json"
+config = "lowrenderdistance.mixins.json"
+
+[[mixins]]
+config = "lowrenderdistance.sodium.mixins.json"
+requiredMods = ["sodium"]

@@ -43,7 +43,7 @@ jobs:
             echo "${key}_name=$(basename "${jars[0]}")" >> "$GITHUB_OUTPUT"
           }
 
-          for loader in fabric forge neoforge; do
+          for loader in fabric neoforge; do
             emit "$loader" "$loader/build/libs"
           done
           emit merged build/libs
@@ -63,14 +63,6 @@ jobs:
 #        with:
 #          name: ${{ steps.jars.outputs.fabric_name }}
 #          path: ${{ steps.jars.outputs.fabric_path }}
-#          archive: false
-#          if-no-files-found: error
-#
-#      - name: capture Forge artifact
-##        uses: actions/upload-artifact@v7
-#        with:
-#          name: ${{ steps.jars.outputs.forge_name }}
-#          path: ${{ steps.jars.outputs.forge_path }}
 #          archive: false
 #          if-no-files-found: error
 #
