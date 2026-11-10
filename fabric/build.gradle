@@ -5,6 +5,7 @@ dependencies {
     minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
     implementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
     implementation "maven.modrinth:sodium:${sodium_version}-fabric"
+    implementation "maven.modrinth:bobby:${bobby_version}"
 }
 
 processResources {
