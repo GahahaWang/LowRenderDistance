@@ -1,0 +1,12 @@
+{
+    "required": false,
+    "minVersion": "0.8",
+    "package": "cc.gahaha.lrd.mixin",
+    "compatibilityLevel": "JAVA_25",
+    "client": [
+        "SodiumDistanceMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

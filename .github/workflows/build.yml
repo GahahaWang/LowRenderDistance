@@ -1,0 +1,84 @@
+name: build
+on: [pull_request, push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [25]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+      - name: make gradle wrapper executable
+        if: ${{ runner.os != 'Windows' }}
+        run: chmod +x ./gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
+      # Each loader builds one installable jar, and the root project merges the three
+      # into one that runs on any of them. With archive: false the upload is not
+      # zipped, and the artifact name becomes the downloaded file name, so each
+      # one is named after the jar it carries.
+      - name: locate jars
+        id: jars
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+
+          emit() {
+            local key=$1 dir=$2
+            local jars=("$dir"/*.jar)
+            if [ ${#jars[@]} -ne 1 ]; then
+              echo "::error::expected one jar in $dir, found ${#jars[@]}"
+              exit 1
+            fi
+            echo "${key}_path=${jars[0]}" >> "$GITHUB_OUTPUT"
+            echo "${key}_name=$(basename "${jars[0]}")" >> "$GITHUB_OUTPUT"
+          }
+
+          for loader in fabric forge neoforge; do
+            emit "$loader" "$loader/build/libs"
+          done
+          emit merged build/libs
+
+      - name: capture merged artifact
+        if: ${{ runner.os == 'Linux' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ steps.jars.outputs.merged_name }}
+          path: ${{ steps.jars.outputs.merged_path }}
+          archive: false
+          if-no-files-found: error
+
+#      - name: capture Fabric artifact
+#        if: ${{ runner.os == 'Linux' }}
+#        uses: actions/upload-artifact@v7
+#        with:
+#          name: ${{ steps.jars.outputs.fabric_name }}
+#          path: ${{ steps.jars.outputs.fabric_path }}
+#          archive: false
+#          if-no-files-found: error
+#
+#      - name: capture Forge artifact
+##        uses: actions/upload-artifact@v7
+#        with:
+#          name: ${{ steps.jars.outputs.forge_name }}
+#          path: ${{ steps.jars.outputs.forge_path }}
+#          archive: false
+#          if-no-files-found: error
+#
+#      - name: capture NeoForge artifact
+#        if: ${{ runner.os == 'Linux' }}
+#        uses: actions/upload-artifact@v7
+#        with:
+#          name: ${{ steps.jars.outputs.neoforge_name }}
+#          path: ${{ steps.jars.outputs.neoforge_path }}
+#          archive: false
+#          if-no-files-found: error
