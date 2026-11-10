@@ -21,7 +21,5 @@
         "minecraft": "${minecraft_version_range_fabric}"
     },
     "suggests": {
-        "sodium": "*",
-        "bobby": "*"
     }
 }

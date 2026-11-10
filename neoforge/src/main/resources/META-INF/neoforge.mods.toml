@@ -21,13 +21,6 @@ versionRange = "${minecraft_version_range_neoforge}"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.lowrenderdistance]]
-modId = "sodium"
-type = "optional"
-versionRange = "[0,)"
-ordering = "NONE"
-side = "CLIENT"
-
 [[mixins]]
 config = "lowrenderdistance.mixins.json"
 
