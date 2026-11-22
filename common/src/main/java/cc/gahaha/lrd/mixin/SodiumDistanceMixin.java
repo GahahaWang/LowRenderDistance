@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 @Mixin(targets = "net.caffeinemc.mods.sodium.client.gui.SodiumConfigBuilder", remap = false)
 public abstract class SodiumDistanceMixin {
 
+    // 只有 Sodium 0.9.2 以前需要：0.9.3 起滑桿範圍直接讀原版設定（DistanceMixin 已改成 1），找不到注入點是正常的。
     @ModifyArg(
             method = "buildGeneralPage",
             at = @At(value = "INVOKE", target = "Lnet/caffeinemc/mods/sodium/api/config/structure/IntegerOptionBuilder;setRange(III)Lnet/caffeinemc/mods/sodium/api/config/structure/IntegerOptionBuilder;"),
@@ -19,7 +20,7 @@ public abstract class SodiumDistanceMixin {
                     to = @At(value = "CONSTANT", args = "stringValue=sodium:general.gamma")
             ),
             index = 0,
-            require = 2,
+            require = 0,
             allow = 2
     )
     private int lrd$lowerDistanceMinimum(int min) {
